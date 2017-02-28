@@ -21,7 +21,7 @@ private:
      */
 
     /**
-     * corresponds to a case when abs(d1 - d2) > 1
+     * corresponds to a case when abs(d1 + d2) > 1
      */
     static const int UNDEF = std::numeric_limits<int>::min();
 
