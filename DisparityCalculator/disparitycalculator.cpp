@@ -67,13 +67,6 @@ QImage DisparityCalculator::calculate(const QImage &img1,
                 break;
             }
 
-            if (UNDEF_I == d || UNDEF_J == d) {
-                c = Qt::green;
-            } else if (UNDEF_0 == d) {
-                c = Qt::cyan;
-            } else if (UNDEF == d) {
-                c = Qt::blue;
-            }
             res.setPixel(j, i, c.rgba());
         }
     }
