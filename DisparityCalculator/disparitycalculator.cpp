@@ -136,7 +136,7 @@ int DisparityCalculator::getDisparity(const intMatr_t &m1,
     }
     int d2 = -dEnd + argMin(R);
 
-    if (std::abs(d1 + d2) > 1) { return UNDEF; }
+    if (std::abs(d1 + d2) > TOLERANCE) { return UNDEF; }
     return d1;
 }
 
