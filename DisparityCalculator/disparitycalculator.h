@@ -16,8 +16,6 @@ private:
     static const int M = 3; // half of the window size (use 7x7 pixel window)
     static const int N = (2 * M + 1) * (2 * M + 1); // number of window pixels
 
-    static const int TOLERANCE = 1; // tolerance to cut off undefined values
-
     /**
      * undefined values for disparity:
      * corresponds to a case when abs(d1 + d2) > TOLERANCE
@@ -68,6 +66,7 @@ private:
      * @param j0 column index
      * @param dStart disparity range start value
      * @param dEnd disparity range end value
+     * @param tolerance used to cut off undefined values
      * @return the disparity value (maybe one of the above "undefined" values)
      */
     static int getDisparity(const intMatr_t &m1,
@@ -75,7 +74,8 @@ private:
                             int i0,
                             int j0,
                             int dStart,
-                            int dEnd);
+                            int dEnd,
+                            int tolerance);
 
 public:
 
@@ -89,12 +89,14 @@ public:
      * @param img2 the 2nd image
      * @param dStart the start value for disparity range
      * @param dEnd the end value for disparity range
+     * @param tolerance used to cut off undefined values
      * @return the disparity map image
      */
     static QImage calculate(const QImage &img1,
                             const QImage &img2,
                             int dStart,
-                            int dEnd);
+                            int dEnd,
+                            int tolerance);
 };
 
 #endif // DISPARITYCALCULATOR_H

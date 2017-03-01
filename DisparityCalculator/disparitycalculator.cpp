@@ -7,7 +7,8 @@
 QImage DisparityCalculator::calculate(const QImage &img1,
                                       const QImage &img2,
                                       int dStart,
-                                      int dEnd) {
+                                      int dEnd,
+                                      int tolerance) {
 
     Q_ASSERT(dStart <= dEnd);
 
@@ -43,7 +44,7 @@ QImage DisparityCalculator::calculate(const QImage &img1,
     for (int i = 0; i < h1; ++i) {
         for (int j = 0; j < w1; ++j) {
 
-            int d = getDisparity(m1, m2, i, j, dStart, dEnd);
+            int d = getDisparity(m1, m2, i, j, dStart, dEnd, tolerance);
 
             QColor c = Qt::green;
 
@@ -85,7 +86,8 @@ int DisparityCalculator::getDisparity(const intMatr_t &m1,
                                       int i0,
                                       int j0,
                                       int dStart,
-                                      int dEnd) {
+                                      int dEnd,
+                                      int tolerance) {
 
     int h1 = m1.size(), w1 = m1[0].size(),
         h2 = m2.size(), w2 = m2[0].size();
@@ -136,7 +138,7 @@ int DisparityCalculator::getDisparity(const intMatr_t &m1,
     }
     int d2 = -dEnd + argMin(R);
 
-    if (std::abs(d1 + d2) > TOLERANCE) { return UNDEF; }
+    if (std::abs(d1 + d2) > tolerance) { return UNDEF; }
     return d1;
 }
 

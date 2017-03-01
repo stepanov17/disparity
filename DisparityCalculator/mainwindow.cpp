@@ -18,9 +18,14 @@ MainWindow::MainWindow(QWidget *parent) :
     valStart = new QIntValidator(this);
     valStart->setBottom(0);
     ui->lnDStart->setValidator(valStart);
-    valEnd   = new QIntValidator(this);
+
+    valEnd = new QIntValidator(this);
     valEnd->setBottom(0);
     ui->lnDEnd->setValidator(valEnd);
+
+    valTolerance = new QIntValidator(this);
+    valTolerance->setBottom(1); // does not work for me (bug?)
+    ui->lnTolerance->setValidator(valTolerance);
 
     QSignalMapper* mapper = new QSignalMapper(this);
     QObject::connect(ui->actionLoad1, SIGNAL(triggered()), mapper, SLOT(map()));
@@ -90,15 +95,32 @@ void MainWindow::onRun() {
         return;
     }
 
-    int dStart = ui->lnDStart->text().toInt();
-    int dEnd = ui->lnDEnd->text().toInt();
+    bool okStart = true, okEnd = true, okTol = true;
+    int dStart = ui->lnDStart->text().toInt(&okStart);
+    int dEnd = ui->lnDEnd->text().toInt(&okEnd);
+    int tol = ui->lnTolerance->text().toInt(&okTol);
+
+    if (!(okStart && okEnd && okTol)) {
+
+        QMessageBox err;
+        err.critical(this, "error", "please set all the parameters");
+        err.show();
+        return;
+    }
 
     if (dStart > dEnd) {
 
         QMessageBox err;
         err.critical(this, "error", "invalid disparity range (max < min)");
         err.show();
+        return;
+    }
 
+    if (tol < 1) {
+
+        QMessageBox err;
+        err.critical(this, "error", "tolerance must be positive");
+        err.show();
         return;
     }
 
@@ -112,7 +134,7 @@ void MainWindow::onRun() {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QImage disp = DisparityCalculator::calculate(
-        p1->toImage(), p2->toImage(), dStart, dEnd);
+        p1->toImage(), p2->toImage(), dStart, dEnd, tol);
     ui->lblDisp->setPixmap(QPixmap::fromImage(disp));
 
     QApplication::restoreOverrideCursor();

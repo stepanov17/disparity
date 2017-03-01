@@ -33,6 +33,7 @@ private:
 
     QIntValidator *valStart;
     QIntValidator *valEnd;
+    QIntValidator *valTolerance;
 };
 
 #endif // MAINWINDOW_H
