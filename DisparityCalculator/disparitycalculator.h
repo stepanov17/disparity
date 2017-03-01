@@ -13,17 +13,14 @@ class DisparityCalculator {
 
 private:
 
-    static const int M = 3; // half of the window size (use 7x7 window)
-    static const int N = (2 * M + 1) * (2 * M + 1); // number of window points
+    static const int M = 3; // half of the window size (use 7x7 pixel window)
+    static const int N = (2 * M + 1) * (2 * M + 1); // number of window pixels
 
     static const int TOLERANCE = 1; // tolerance to cut off undefined values
 
     /**
      * undefined values for disparity:
-     */
-
-    /**
-     * corresponds to a case when abs(d1 - d2) > 1
+     * corresponds to a case when abs(d1 + d2) > TOLERANCE
      */
     static const int UNDEF = std::numeric_limits<int>::min();
 
@@ -55,7 +52,7 @@ private:
      * @param m2 2nd intensity matrix
      * @param i0 row index
      * @param j0 column index
-     * @return the response value
+     * @return the response pair (value, <zero intensity pixel found flag>)
      */
     static std::pair<double, bool> r(const intMatr_t &m1,
                                      const intMatr_t &m2,
@@ -71,7 +68,7 @@ private:
      * @param j0 column index
      * @param dStart disparity range start value
      * @param dEnd disparity range end value
-     * @return the disparity value
+     * @return the disparity value (maybe one of the above "undefined" values)
      */
     static int getDisparity(const intMatr_t &m1,
                             const intMatr_t &m2,
