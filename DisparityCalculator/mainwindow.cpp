@@ -23,10 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     valEnd->setBottom(0);
     ui->lnDEnd->setValidator(valEnd);
 
-    valTolerance = new QIntValidator(this);
-    valTolerance->setBottom(1); // does not work for me (bug?)
-    ui->lnTolerance->setValidator(valTolerance);
-
     QSignalMapper* mapper = new QSignalMapper(this);
     QObject::connect(ui->actionLoad1, SIGNAL(triggered()), mapper, SLOT(map()));
     QObject::connect(ui->actionLoad2, SIGNAL(triggered()), mapper, SLOT(map()));
@@ -95,12 +91,11 @@ void MainWindow::onRun() {
         return;
     }
 
-    bool okStart = true, okEnd = true, okTol = true;
+    bool okStart = true, okEnd = true;
     int dStart = ui->lnDStart->text().toInt(&okStart);
     int dEnd = ui->lnDEnd->text().toInt(&okEnd);
-    int tol = ui->lnTolerance->text().toInt(&okTol);
 
-    if (!(okStart && okEnd && okTol)) {
+    if (!(okStart && okEnd)) {
 
         QMessageBox err;
         err.critical(this, "error", "please set all the parameters");
@@ -116,14 +111,6 @@ void MainWindow::onRun() {
         return;
     }
 
-    if (tol < 1) {
-
-        QMessageBox err;
-        err.critical(this, "error", "tolerance must be positive");
-        err.show();
-        return;
-    }
-
     const QPixmap *p1 = ui->lblImage1->pixmap();
     const QPixmap *p2 = ui->lblImage2->pixmap();
     if (!(p1 && p2)) {
@@ -134,7 +121,7 @@ void MainWindow::onRun() {
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     QImage disp = DisparityCalculator::calculate(
-        p1->toImage(), p2->toImage(), dStart, dEnd, tol);
+        p1->toImage(), p2->toImage(), dStart, dEnd);
     ui->lblDisp->setPixmap(QPixmap::fromImage(disp));
 
     QApplication::restoreOverrideCursor();

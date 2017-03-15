@@ -160,13 +160,6 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>tolerance</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item>
@@ -182,13 +175,6 @@
             <widget class="QLineEdit" name="lnDEnd">
              <property name="text">
               <string>311</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lnTolerance">
-             <property name="text">
-              <string>10</string>
              </property>
             </widget>
            </item>

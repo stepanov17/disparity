@@ -18,24 +18,11 @@ private:
 
     /**
      * undefined values for disparity:
-     * corresponds to a case when abs(d1 + d2) > TOLERANCE
+     * corresponds to a case, when abs(d1 + d2) > 1,
+     * or one of the windows goes outside of the corresponding image,
+     * or zero intensity pixel found for one of the windows
      */
     static const int UNDEF = std::numeric_limits<int>::min();
-
-    /**
-     * row index for one of the windows goes outside of the corresponding image
-     */
-    static const int UNDEF_I = UNDEF + 1;
-
-    /**
-     * column index for one of the windows goes outside of the corresponding image
-     */
-    static const int UNDEF_J = UNDEF + 2;
-
-    /**
-     * zero intensity pixel found for one of the windows
-     */
-    static const int UNDEF_0 = UNDEF + 3;
 
     /**
      * arg min for the vector of doubles
@@ -50,7 +37,7 @@ private:
      * @param m2 2nd intensity matrix
      * @param i0 row index
      * @param j0 column index
-     * @return the response pair (value, <zero intensity pixel found flag>)
+     * @return the response pair (value, <"undefined" flag>)
      */
     static std::pair<double, bool> r(const intMatr_t &m1,
                                      const intMatr_t &m2,
@@ -66,7 +53,6 @@ private:
      * @param j0 column index
      * @param dStart disparity range start value
      * @param dEnd disparity range end value
-     * @param tolerance used to cut off undefined values
      * @return the disparity value (maybe one of the above "undefined" values)
      */
     static int getDisparity(const intMatr_t &m1,
@@ -74,8 +60,7 @@ private:
                             int i0,
                             int j0,
                             int dStart,
-                            int dEnd,
-                            int tolerance);
+                            int dEnd);
 
 public:
 
@@ -89,14 +74,12 @@ public:
      * @param img2 the 2nd image
      * @param dStart the start value for disparity range
      * @param dEnd the end value for disparity range
-     * @param tolerance used to cut off undefined values
      * @return the disparity map image
      */
     static QImage calculate(const QImage &img1,
                             const QImage &img2,
                             int dStart,
-                            int dEnd,
-                            int tolerance);
+                            int dEnd);
 };
 
 #endif // DISPARITYCALCULATOR_H
